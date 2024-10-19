@@ -24,9 +24,29 @@ export default function initGame() {
             "npc-left": 15,
         }
     });
+    k.loadSprite("bird", "./blueBird.png", {
+        sliceY: 13,
+        sliceX: 4,
+        anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
+            "down-idle": 0,
+            "up-idle": 13,
+            "right-idle": 10,
+            "left-idle": 6,
+            right: { from: 4, to: 5, loop: true },
+            left: { from: 6, to: 7, loop: true },
+            down: { from: 8, to: 9, loop: true },
+            up: { from: 10, to: 11, loop: true },
+            "npc-down": 21,
+            "npc-up": 48,
+            "npc-right": 32,
+            "npc-left": 8,
+        }
+    });
 
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
+
+    // k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
   
     const player = k.add([
         k.sprite("characters", {anim: "down-idle"}),
@@ -96,4 +116,16 @@ export default function initGame() {
         // direction is chosen from the above if statements
         player.move(player.direction.scale(player.speed));
     });
+
+    // the villagers
+    const npc = k.add([
+        k.sprite("bird", {anim: "npc-left"}),
+        k.area(),
+        // static will be a wall to not push
+        k.body({ isStatic: true}),
+        k.anchor("center"),
+        k.scale(7),
+        k.pos(1480,500),
+    ]);
+
 }
