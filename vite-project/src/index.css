@@ -76,6 +76,8 @@ h1 {
 
 .login-form {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   background-color: white;
   padding: 20px;
@@ -86,6 +88,8 @@ h1 {
 .login-form h1 {
   margin-bottom: 20px;
   text-align: center;
+  font-family: "gameboy", sans-serif;
+  font-size: 40px;
 }
 
 .login-form input {
@@ -95,6 +99,7 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
+  font-family: "gameboy", sans-serif;
 }
 
 .login-form button {
@@ -105,6 +110,7 @@ h1 {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: "gameboy", sans-serif;
 }
 
 .login-form button:hover {
