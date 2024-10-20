@@ -1,11 +1,54 @@
-import initKaplay from "./kaplayCtx";
+import initKaplay from "./kaplayCtx"; 
+//for firebase
+import {db} from './firebase.js'; 
+import {collection, addDoc} from 'firebase/firestore'; 
 
-export default function initGame() {
+
+
+export async function addPlayerToFirebase(username){
+  try {
+    const docRef = await addDoc(collection(db, "Player"), {
+      username: username,
+      health: 100,
+      seedsCurrency: 50,
+      // add other properties as needed 
+      // weapon, healthPotions, powerPotions
+    });
+    console.log("Player created with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error creating player: ", error);
+  }
+  console.log("created playerin db");
+}
+
+export default async function initGame(username) {
     const k = initKaplay();
+
+    // // Create player in the database
+    // const createPlayer = async (username) => {
+    //   try {
+    //     const docRef = await addDoc(collection(db, "Player"), {
+    //       username: username,
+    //       health: 100,
+    //       seedsCurrency: 50,
+    //       // add other properties as needed 
+    //       // weapon, healthPotions, powerPotions
+    //     });
+    //     console.log("Player created with ID: ", docRef.id);
+    //   } catch (error) {
+    //     console.error("Error creating player: ", error);
+    //   }
+    //   console.log("created playerin db");
+    // };
+
+    // await createPlayer(username);
+
+
     // bc if you move diagonaly 
     const DIAGONAL_FACTOR = 1/Math.sqrt(2)
 
     k.loadSprite("background", "./background.png"); //how to load background image
+    
     k.loadSprite("characters", "./characters.png", {
         sliceY: 2,
         sliceX: 8,
@@ -46,6 +89,12 @@ export default function initGame() {
             direction: k.vec2(0,0),
         },
     ]);
+
+      // Call this function based on a condition, such as user input
+      k.onKeyPress("space", async () => {
+        const username = prompt("Enter your username:");
+        await createPlayer(username);  // Asynchronously create the player
+      });
 
     // on frame
     player.onUpdate(() =>{
