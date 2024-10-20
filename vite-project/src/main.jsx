@@ -32,6 +32,7 @@ function Main() {
     }
   };
 
+
   // Initialize the game after gameStarted becomes true
   useEffect(() => {
     if (gameStarted) {
