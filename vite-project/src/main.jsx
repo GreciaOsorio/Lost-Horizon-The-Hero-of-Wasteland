@@ -41,7 +41,7 @@ function Main() {
   // Initialize the game after gameStarted becomes true
   useEffect(() => {
     if (gameStarted) {
-      createRoot(ui).render(
+      root.render(
         <StrictMode>
           <Provider store={store}>
             <ReactUI />
