@@ -71,7 +71,7 @@ h1 {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #3d251e; /* Background color */
+  background-image: url("https://i.pinimg.com/564x/8f/42/39/8f42396cb6e6e8649180df3dd590dd6a.jpg"); /* Background color */
 }
 
 .login-form {
