@@ -27,24 +27,31 @@ export default async function initGame(username) {
     const DIAGONAL_FACTOR = 1/Math.sqrt(2)
 
     k.loadSprite("background", "./background.png"); //how to load background image
-    k.loadSprite("characters", "./characters.png", {
-        sliceY: 2,
-        sliceX: 8,
+    k.loadSprite("characters", "./000.png", {
+        sliceY: 4,
+        sliceX: 3,
         anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
             "down-idle": 0,
-            "up-idle": 1,
-            "right-idle": 2,
+            "up-idle": 9,
+            "right-idle": 6,
             "left-idle": 3,
-            right: { from: 4, to: 5, loop: true },
-            left: { from: 6, to: 7, loop: true },
-            down: { from: 8, to: 9, loop: true },
-            up: { from: 10, to: 11, loop: true },
-            "npc-down": 12,
-            "npc-up": 13,
-            "npc-right": 14,
-            "npc-left": 15,
+            right: { from: 6, to: 8, loop: true },
+            left: { from: 3, to: 5, loop: true },
+            down: { from: 0, to: 2, loop: true },
+            up: { from: 9, to: 11, loop: true },
+            "npc-down": 0,
+            "npc-up": 9,
+            "npc-right": 6,
+            "npc-left": 3,
         }
-    });
+    }).then(() => {
+      console.log("Sprite loaded successfully");
+  }).catch((err) => {
+      console.error("Error loading sprite", err);
+  });
+    
+
+
     k.loadSprite("bird", "./blueBird.png", {
         sliceY: 13,
         sliceX: 4,
@@ -82,7 +89,6 @@ export default async function initGame(username) {
           "npc-left": 5,
       }
     });
-    
 
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
@@ -121,7 +127,7 @@ export default async function initGame(username) {
         k.body(),
         k.anchor("center"),
         k.pos(50,100),
-        k.scale(4),
+        k.scale(3),
         // adding a tag to identify in collision handlers
         "player",
         // creating custom properties
@@ -262,25 +268,39 @@ oilMonster.onCollide("player", (player) => {
   if (!oilMonsterInteractionComplete) {
     console.log("Collided with the oilMonster");
 
+    // Reset text before each interaction
+    store.set(textBoxContentAtom, "");
+
     // Animation logic based on player's direction
     if (player.direction.eq(k.vec2(0, -1))) {
       oilMonster.play("npc-down");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
     }
 
     if (player.direction.eq(k.vec2(0, 1))) {
       oilMonster.play("npc-up");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
     }
 
     if (player.direction.eq(k.vec2(1, 0))) {
       oilMonster.play("npc-right");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
     }
 
     if (player.direction.eq(k.vec2(-1, 0))) {
       oilMonster.play("npc-left");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
     }
+
+    // Show the text box
+    store.set(isTextBoxVisibleAtom, true);
 
     // Set interaction as complete so that the collision doesn't repeat
     oilMonsterInteractionComplete = true;
+
 
     k.wait(3, () => {
       // After interaction, you can reset the interactionComplete if needed
