@@ -3,8 +3,7 @@ import initKaplay from "./kaplayCtx";
 import {db} from './firebase.js'; 
 import {collection, addDoc} from 'firebase/firestore'; 
 
-
-
+//For Firebase 
 export async function addPlayerToFirebase(username){
   try {
     const docRef = await addDoc(collection(db, "Player"), {
