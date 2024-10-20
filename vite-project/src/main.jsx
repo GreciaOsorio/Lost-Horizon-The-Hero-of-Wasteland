@@ -48,25 +48,20 @@ function TitlePage({ onTitleEnd }) {
 
 
 //Login Sign up Page 
-function AuthPage({ onAuthSuccess }) {
+function AuthPage({ onAuthSuccess, onSetUsername }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState(''); // New state for password confirmation
-  const [isSignUp, setIsSignUp] = useState(false); // Toggle between Sign Up and Log In
+  const [passwordConfirm, setPasswordConfirm] = useState(''); // For password confirmation during sign-up
+  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
 
-  // Helper function to convert username to an email-like format
+  // Convert the username to an email-like format
   const usernameToEmail = (username) => `${username}@username.com`;
-
-
-
 
   const handleAuth = async (e) => {
     e.preventDefault();
-
     const email = usernameToEmail(username);
 
-    // Check if passwords match when signing up
     if (isSignUp && password !== passwordConfirm) {
       setError('Passwords do not match');
       return;
@@ -74,13 +69,16 @@ function AuthPage({ onAuthSuccess }) {
 
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
-        await addPlayerToFirebase(username);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await addPlayerToFirebase(username); // Add player to Firebase when signing up
+        onSetUsername(username); // Pass the username back to the parent
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userDoc = await fetchPlayerFromFirebase(userCredential.user.uid); // Fetch player data after login
+        onSetUsername(userDoc.username); // Set the username if it exists
       }
-      onAuthSuccess();
-    } catch (error){
+      onAuthSuccess(); // Call success function once logged in or signed up
+    } catch (error) {
       switch (error.code) {
         case 'auth/email-already-in-use':
           setError('Email already in use.');
@@ -95,7 +93,6 @@ function AuthPage({ onAuthSuccess }) {
           setError('Authentication failed. Please try again.');
       }
     }
-
   };
 
   return (
@@ -117,7 +114,7 @@ function AuthPage({ onAuthSuccess }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {isSignUp && ( // Show password confirmation only in sign-up mode
+        {isSignUp && (
           <input
             type="password"
             placeholder="Confirm password"
@@ -133,36 +130,21 @@ function AuthPage({ onAuthSuccess }) {
       </button>
     </div>
   );
-
 }
 
 function Main() {
   const [username, setUsername] = useState(""); // State for username
-  const [gameStarted, setGameStarted] = useState(false); // State to track if the game has started
-  const [showTitle, setShowTitle] = useState(true); // State for showing the title screen
-  const [authComplete, setAuthComplete] = useState(false); //track user logged in or signup
-  
-  // Define the style you want for the background
-  const myStyle = {
-    backgroundImage:
-      "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')",
-    height: "100vh",
-    marginTop: "-70px",
-    fontSize: "50px",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-  };
+  const [gameStarted, setGameStarted] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
+  const [authComplete, setAuthComplete] = useState(false);
 
-  const handleCreatePlayer = async (event) => {
-    event.preventDefault();
-    if (username) {
-      console.log("Creating player in Firebase...");
-      await addPlayerToFirebase(username); // Create player in Firebase
-      setGameStarted(true); // Set game as started after the player is created
+  // UseEffect to check if the user already has a player after login
+  useEffect(() => {
+    if (authComplete && username) {
+      setGameStarted(true);
     }
-  };
+  }, [authComplete, username]);
 
-  // Initialize the game after gameStarted becomes true
   useEffect(() => {
     if (gameStarted) {
       root.render(
@@ -179,35 +161,35 @@ function Main() {
   return (
     <div className="CreatingPlayer">
       {showTitle ? (
-        <TitlePage onTitleEnd={() => setShowTitle(false)} /> // Call TitlePage with callback
-      ) : !authComplete ? ( // Show the AuthPage if auth isn't complete
-        <AuthPage onAuthSuccess={() => setAuthComplete(true)} />
-      ) :
-      !gameStarted ? ( // Show the form only if the game hasn't started
-        <div className="login-form"> {/* Wrap the form with this class */}
+        <TitlePage onTitleEnd={() => setShowTitle(false)} />
+      ) : !authComplete ? (
+        <AuthPage onAuthSuccess={() => setAuthComplete(true)} onSetUsername={setUsername} />
+      ) : !gameStarted && !username ? (
+        <div className="login-form">
           <h1>Enter your player name to start the game!</h1>
-          <form onSubmit={handleCreatePlayer}>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            setGameStarted(true);
+          }}>
             <input
               type="text"
               placeholder="Enter username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)} // Update state on change
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
             <button type="submit">Start Game</button>
           </form>
         </div>
       ) : (
-        <div id="game-container" style={myStyle}>
-          {/* The game will be rendered inside this container */ }
+        <div id="game-container">
+          {/* Game rendered here */}
         </div>
       )}
     </div>
   );
-
-
-
 }
+
 
 // Render the root with Provider for state management
 root.render(

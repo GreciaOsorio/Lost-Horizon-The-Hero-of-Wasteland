@@ -2,7 +2,7 @@ import initKaplay from "./kaplayCtx";
 import { isTextBoxVisibleAtom, store, textBoxContentAtom } from "./store";
 //for firebase
 import {db} from './firebase.js'; 
-import {collection, addDoc} from 'firebase/firestore'; 
+import {collection, doc, addDoc} from 'firebase/firestore'; 
 
 //For Firebase 
 export async function addPlayerToFirebase(username) {
@@ -16,6 +16,16 @@ export async function addPlayerToFirebase(username) {
     console.log("Player created with ID: ", docRef.id);
   } catch (error) {
     console.error("Error creating player: ", error);
+  }
+}
+
+export async function fetchPlayerFromFirebase(uid) {
+  const playerDoc = await getDoc(doc(db, "Player", uid));
+  if (playerDoc.exists()) {
+    return playerDoc.data();
+  } else {
+    console.log("No such player!");
+    return null;
   }
 }
 
