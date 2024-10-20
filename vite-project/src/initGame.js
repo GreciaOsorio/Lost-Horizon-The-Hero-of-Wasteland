@@ -27,6 +27,7 @@ export default async function initGame(username) {
     const DIAGONAL_FACTOR = 1/Math.sqrt(2)
 
     k.loadSprite("background", "./background.png"); //how to load background image
+    k.loadSprite("door", "./door.png");
     k.loadSprite("characters", "./000.png", {
         sliceY: 4,
         sliceX: 3,
@@ -92,10 +93,14 @@ export default async function initGame(username) {
 
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
+    k.add([k.sprite("door"), k.pos(800, 905), k.scale(1.3)]);
 
      // Load the wall asset
      k.loadSprite("floor1", "./longfloor.png", {
-    
+      
+     });
+     k.loadSprite("floor", "./longfloor.png", {
+      sliceX: 2
      });
      k.loadSprite("wall","./vertical_wall.png", {
 
@@ -103,10 +108,15 @@ export default async function initGame(username) {
      k.loadSprite("roof","./horizontal_wall.png", {
 
      });
+     k.loadSprite("beam", "./beam.png", {
+      sliceY: 2
+      
+     });
      const floors = [
-      k.add([k.sprite("floor1"), k.pos(0, 100), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
-      k.add([k.sprite("floor1"), k.pos(110, 250), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
-      k.add([k.sprite("floor1"), k.pos(0, 450), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+      k.add([k.sprite("floor1"), k.pos(0, 100), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor1"]),
+      k.add([k.sprite("floor"), k.pos(980, 250), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+      k.add([k.sprite("floor"), k.pos(450, 435), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+      k.add([k.sprite("floor"), k.pos(0, 800), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
     ];
     const walls = [
       k.add([k.sprite("wall"), k.pos(-25, 0), k.scale(1), k.area(), k.body({ isStatic: true }), "wall"]),
@@ -118,6 +128,9 @@ export default async function initGame(username) {
       k.add([k.sprite("roof"), k.pos(0, 1040), k.scale(1), k.area(), k.body({ isStatic: true }), "bottom"]),
 
     ];
+    const beams =  [
+      k.add([k.sprite("beam"), k.pos(400, 160), k.scale(0.5), k.area(), k.body({ isStatic: true }), "beam"]),
+    ]
  
   
     const player = k.add([
