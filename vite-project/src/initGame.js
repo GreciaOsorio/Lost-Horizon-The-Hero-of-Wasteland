@@ -1,8 +1,29 @@
-import initKaplay from "./kaplayCtx";
-import { isTextBoxVisibleAtom, store, textBoxContentAtom } from "./store";
 
-export default function initGame() {
-    const k = initKaplay();
+import initKaplay from "./kaplayCtx"; 
+import { isTextBoxVisibleAtom, store, textBoxContentAtom } from "./store";
+//for firebase
+import {db} from './firebase.js'; 
+import {collection, addDoc} from 'firebase/firestore'; 
+
+//For Firebase 
+export async function addPlayerToFirebase(username){
+  try {
+    const docRef = await addDoc(collection(db, "Player"), {
+      username: username,
+      health: 100,
+      seedsCurrency: 50,
+      // add other properties as needed 
+      // weapon, healthPotions, powerPotions
+    });
+    console.log("Player created with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error creating player: ", error);
+  }
+  console.log("created playerin db");
+}
+
+export default async function initGame(username) {
+     const k = initKaplay();
     // bc if you move diagonaly 
     const DIAGONAL_FACTOR = 1/Math.sqrt(2)
 
