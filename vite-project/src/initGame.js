@@ -496,24 +496,24 @@ smogMonster.onCollide("player", (player) => {
     // Animation logic based on player's direction
     if (player.direction.eq(k.vec2(0, -1))) {
       smogMonster.play("npc-down");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "Big companies brought me here...");
     }
 
     if (player.direction.eq(k.vec2(0, 1))) {
       smogMonster.play("npc-up");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "Hard to breath ain't it...");
 
     }
 
     if (player.direction.eq(k.vec2(1, 0))) {
       smogMonster.play("npc-right");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "Big companies brought me here...");
 
     }
 
     if (player.direction.eq(k.vec2(-1, 0))) {
       smogMonster.play("npc-left");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "Hard to breath ain't it...");
 
     }
 
@@ -530,6 +530,157 @@ smogMonster.onCollide("player", (player) => {
       console.log("OilMonster interaction reset after 3 seconds.");
       // CHANGE LATER
       k.destroy(smogMonster);
+    });
+  }
+});
+
+// Separate interaction flag for PlasticMonster
+let PlasticMonsterInteractionComplete = false;
+
+PlasticMonsterr.onCollide("player", (player) => {
+  if (!PlasticMonsterInteractionComplete) {
+    console.log("Collided with the smogMonster");
+
+    // Reset text before each interaction
+    store.set(textBoxContentAtom, "");
+
+    // Animation logic based on player's direction
+    if (player.direction.eq(k.vec2(0, -1))) {
+      PlasticMonster.play("npc-down");
+      store.set(textBoxContentAtom, "I am harmful for the ocean...");
+    }
+
+    if (player.direction.eq(k.vec2(0, 1))) {
+      PlasticMonster.play("npc-up");
+      store.set(textBoxContentAtom, "Those poor turtle confuse me for food...");
+
+    }
+
+    if (player.direction.eq(k.vec2(1, 0))) {
+      PlasticMonster.play("npc-right");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    if (player.direction.eq(k.vec2(-1, 0))) {
+      PlasticMonster.play("npc-left");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    // Show the text box
+    store.set(isTextBoxVisibleAtom, true);
+
+    // Set interaction as complete so that the collision doesn't repeat
+    PlasticMonsterInteractionComplete = true;
+
+
+    k.wait(3, () => {
+      // After interaction, you can reset the interactionComplete if needed
+    
+      console.log("PlasticMonster interaction reset after 3 seconds.");
+      // CHANGE LATER
+      k.destroy(PlasticMonster);
+    });
+  }
+});
+
+let TrashcanMonsterInteractionComplete = false;
+
+smogMonster.onCollide("player", (player) => {
+  if (!TrashcanMonsterInteractionComplete) {
+    console.log("Collided with the smogMonster");
+
+    // Reset text before each interaction
+    store.set(textBoxContentAtom, "");
+
+    // Animation logic based on player's direction
+    if (player.direction.eq(k.vec2(0, -1))) {
+      TrashcanMonster.play("npc-down");
+      store.set(textBoxContentAtom, "I am harmful for the ocean...");
+    }
+
+    if (player.direction.eq(k.vec2(0, 1))) {
+      TrashcanMonster.play("npc-up");
+      store.set(textBoxContentAtom, "Those poor turtle confuse me for food...");
+
+    }
+
+    if (player.direction.eq(k.vec2(1, 0))) {
+      TrashcanMonster.play("npc-right");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    if (player.direction.eq(k.vec2(-1, 0))) {
+      TrashcanMonster.play("npc-left");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    // Show the text box
+    store.set(isTextBoxVisibleAtom, true);
+
+    // Set interaction as complete so that the collision doesn't repeat
+    TrashcanMonsterInteractionComplete = true;
+
+
+    k.wait(3, () => {
+      // After interaction, you can reset the interactionComplete if needed
+    
+      console.log("Trashcan Monster interaction reset after 3 seconds.");
+      // CHANGE LATER
+      k.destroy(TrashcanMonster);
+    });
+  }
+});
+
+let sickwomanInteractionComplete = false;
+
+sickwoman.onCollide("player", (player) => {
+  if (!sickwomanInteractionComplete) {
+    console.log("Collided with the smogMonster");
+
+    // Reset text before each interaction
+    store.set(textBoxContentAtom, "");
+
+    // Animation logic based on player's direction
+    if (player.direction.eq(k.vec2(0, -1))) {
+      sickwoman.play("npc-down");
+      store.set(textBoxContentAtom, "Cough Cough...");
+    }
+
+    if (player.direction.eq(k.vec2(0, 1))) {
+      sickwoman.play("npc-up");
+      store.set(textBoxContentAtom, "The pollution got me sick...");
+
+    }
+
+    if (player.direction.eq(k.vec2(1, 0))) {
+      sickwoman.play("npc-right");
+      store.set(textBoxContentAtom, "Cough Cough...");
+
+    }
+
+    if (player.direction.eq(k.vec2(-1, 0))) {
+      sickwoman.play("npc-left");
+      store.set(textBoxContentAtom, "I'm so ill because of pollution...");
+
+    }
+
+    // Show the text box
+    store.set(isTextBoxVisibleAtom, true);
+
+    // Set interaction as complete so that the collision doesn't repeat
+    sickwomanInteractionComplete = true;
+
+
+    k.wait(3, () => {
+      // After interaction, you can reset the interactionComplete if needed
+    
+      console.log("sickwoman interaction reset after 3 seconds.");
+      // CHANGE LATER
+      k.destroy(sickwoman);
     });
   }
 });
