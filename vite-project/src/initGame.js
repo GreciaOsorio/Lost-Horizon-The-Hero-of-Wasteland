@@ -24,26 +24,6 @@ export async function addPlayerToFirebase(username){
 export default async function initGame(username) {
     const k = initKaplay();
 
-    // // Create player in the database
-    // const createPlayer = async (username) => {
-    //   try {
-    //     const docRef = await addDoc(collection(db, "Player"), {
-    //       username: username,
-    //       health: 100,
-    //       seedsCurrency: 50,
-    //       // add other properties as needed 
-    //       // weapon, healthPotions, powerPotions
-    //     });
-    //     console.log("Player created with ID: ", docRef.id);
-    //   } catch (error) {
-    //     console.error("Error creating player: ", error);
-    //   }
-    //   console.log("created playerin db");
-    // };
-
-    // await createPlayer(username);
-
-
     // bc if you move diagonaly 
     const DIAGONAL_FACTOR = 1/Math.sqrt(2)
 

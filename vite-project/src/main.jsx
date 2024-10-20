@@ -17,15 +17,6 @@ function Main(){
     }
   };
 
-  // const handleCreatePlayer = async (event) => {
-  //   event.preventDefault();
-  //   if (username) {
-  //     await initGame(username); // Call initGame with username
-  //     console.log("made it to main username was sent");
-  //     setGameStarted(true); // Set game as started after the username is submitted
-  //   }
-  // };
-
 
   //Initialize the game after gameStarted becomes true
   useEffect(() => {
