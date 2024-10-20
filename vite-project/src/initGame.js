@@ -76,18 +76,17 @@ export default async function initGame(username) {
       sliceX: 2,
       anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
           "down-idle": 0,
-          "up-idle": 4,
-          "right-idle": 2,
-          "left-idle": 5,
+          "up-idle": 5,
+          "right-idle": 4,
+          "left-idle": 2,
           right: { from: 5, to: 6, loop: true },
           left: { from: 1, to: 2, loop: true },
           down: { from: 0, to: 1, loop: true },
           up: { from: 3, to: 4, loop: true },
-          // 4 is the right one
           "npc-down": 0,
           "npc-up": 5,
-          "npc-right": 2,
-          "npc-left": 5,
+          "npc-right": 4,
+          "npc-left": 2,
       }
     });
 
@@ -224,7 +223,7 @@ export default async function initGame(username) {
       // k body is for the physics/collision
       k.body({ isStatic: true, isSensor: true }),
       k.anchor("center"),
-      k.pos(50,300),
+      k.pos(1200,200),
       k.scale(0.5),
       "oilMonsters"
       // adding a tag to identify in collision handlers
