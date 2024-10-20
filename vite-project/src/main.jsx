@@ -20,6 +20,11 @@ new ResizeObserver(() => {
   );
 }).observe(ui.parentElement);
 
+
+// Create the root once
+const root = createRoot(ui);
+
+
 function Main() {
   const [username, setUsername] = useState(""); // State for username
   const [gameStarted, setGameStarted] = useState(false); // State to track if the game has started
@@ -36,7 +41,7 @@ function Main() {
   // Initialize the game after gameStarted becomes true
   useEffect(() => {
     if (gameStarted) {
-      createRoot(ui).render(
+      root.render(
         <StrictMode>
           <Provider store={store}>
             <ReactUI />
@@ -75,7 +80,7 @@ function Main() {
 }
 
 // Render the root with Provider for state management
-createRoot(ui).render(
+root.render(
   <StrictMode>
     <Main />
   </StrictMode>
