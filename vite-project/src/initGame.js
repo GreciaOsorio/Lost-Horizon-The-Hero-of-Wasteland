@@ -71,22 +71,27 @@ export default async function initGame(username) {
      k.loadSprite("floor1", "./longfloor.png", {
     
      });
+     k.loadSprite("wall","./vertical_wall.png", {
 
+     });
+     k.loadSprite("roof","./horizontal_wall.png", {
+
+     });
      const floors = [
       k.add([k.sprite("floor1"), k.pos(0, 100), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
       k.add([k.sprite("floor1"), k.pos(110, 250), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
       k.add([k.sprite("floor1"), k.pos(0, 450), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
     ];
-    
-      // Add the wall (positioning it at specific coordinates, e.g., x: 100, y: 200)
-  //   const wall = k.add([
-  //     k.sprite("floor1"),
-  //     k.area(), // Area is for collision
-  //     k.body({ isStatic: true }), // Make the wall static so it doesn’t move
-  //     k.pos(0, 100), // Position the wall at coordinates x=100, y=200
-  //     k.scale(0.5), // Adjust scale if needed
-  //     "wall", // Tag it as 'wall' to identify it in collisions
-  // ]);
+    const walls = [
+      k.add([k.sprite("wall"), k.pos(-25, 0), k.scale(1), k.area(), k.body({ isStatic: true }), "wall"]),
+      k.add([k.sprite("wall"), k.pos(1880, 0), k.scale(1), k.area(), k.body({ isStatic: true }), "wall"]),
+
+    ];
+    const roofs = [
+      k.add([k.sprite("roof"), k.pos(0, -28), k.scale(1), k.area(), k.body({ isStatic: true }), "roof"]),
+      k.add([k.sprite("roof"), k.pos(0, 1040), k.scale(1), k.area(), k.body({ isStatic: true }), "bottom"]),
+
+    ];
  
   
     const player = k.add([
@@ -95,7 +100,7 @@ export default async function initGame(username) {
         // k body is for the physics/collision
         k.body(),
         k.anchor("center"),
-        k.pos(5,100),
+        k.pos(50,100),
         k.scale(4),
         // adding a tag to identify in collision handlers
         "player",
