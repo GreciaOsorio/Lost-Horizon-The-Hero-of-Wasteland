@@ -136,7 +136,7 @@ export default async function initGame(username) {
             player.play("up");
           }
 
-        //   for down logic
+         //   for down logic
       
           if (player.direction.eq(k.vec2(0, 1)) && player.getCurAnim().name !== "down") {
             player.play("down");
@@ -144,7 +144,7 @@ export default async function initGame(username) {
 
     //   for idle logi
           if (player.direction.eq(k.vec2(0, 0)) && !player.getCurAnim().name.includes("idle")) {
-            player.play($player.getCurAnim().name-idle);
+            player.play(`${player.getCurAnim().name}-idle`);
           }
       
         //   for diagnole movement
