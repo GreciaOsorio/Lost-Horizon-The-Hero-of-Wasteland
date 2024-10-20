@@ -1,4 +1,3 @@
-
 import initKaplay from "./kaplayCtx"; 
 import { isTextBoxVisibleAtom, store, textBoxContentAtom } from "./store";
 //for firebase
@@ -73,16 +72,23 @@ export default async function initGame(username) {
     
      });
 
-     k.loadSprite("floor1", "./longfloor.png");
-
-     // Create multiple floors with different positions and possibly larger scale for visibility
      const floors = [
-       k.add([k.sprite("floor1"), k.pos(0, 100), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
-       k.add([k.sprite("floor1"), k.pos(110, 300), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
-       k.add([k.sprite("floor1"), k.pos(500, 800), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
-       // Add more floors as needed
-     ];
-
+      k.add([k.sprite("floor1"), k.pos(0, 100), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+      k.add([k.sprite("floor1"), k.pos(110, 250), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+      k.add([k.sprite("floor1"), k.pos(0, 450), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+    ];
+    
+      // Add the wall (positioning it at specific coordinates, e.g., x: 100, y: 200)
+  //   const wall = k.add([
+  //     k.sprite("floor1"),
+  //     k.area(), // Area is for collision
+  //     k.body({ isStatic: true }), // Make the wall static so it doesn’t move
+  //     k.pos(0, 100), // Position the wall at coordinates x=100, y=200
+  //     k.scale(0.5), // Adjust scale if needed
+  //     "wall", // Tag it as 'wall' to identify it in collisions
+  // ]);
+ 
+  
     const player = k.add([
         k.sprite("characters", {anim: "down-idle"}),
         k.area(),
@@ -138,7 +144,7 @@ export default async function initGame(username) {
 
     //   for idle logi
           if (player.direction.eq(k.vec2(0, 0)) && !player.getCurAnim().name.includes("idle")) {
-            player.play(`${player.getCurAnim().name}-idle`);
+            player.play($player.getCurAnim().name-idle);
           }
       
         //   for diagnole movement
@@ -201,13 +207,11 @@ npc.onCollide("player", (player) => {
     // Set interactionComplete to true after text is shown
     interactionComplete = true;
 
-    k.wait(2, () => {
+    k.wait(3, () => {
       // Remove the bird after interaction is complete
       k.destroy(npc);
       console.log("Bird has been removed after interaction.");
     });
   }
 });
-
-
 }
