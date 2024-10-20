@@ -48,6 +48,23 @@ h1 {
   top: 0;
 }
 
+/* Title screen styles */
+.title-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: black;
+}
+
+.title-screen h1 {
+  font-family: "gameboy", sans-serif; /* Assuming you have the font added */
+  font-size: 64px;
+  color: white;
+  text-align: center;
+}
+
+
 /* Center the login form */
 .CreatingPlayer {
   display: flex;
