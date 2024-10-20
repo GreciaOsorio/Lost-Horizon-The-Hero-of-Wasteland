@@ -284,8 +284,10 @@ oilMonster.onCollide("player", (player) => {
 
     k.wait(3, () => {
       // After interaction, you can reset the interactionComplete if needed
-      oilMonsterInteractionComplete = false;
+    
       console.log("OilMonster interaction reset after 3 seconds.");
+      // CHANGE LATER
+      k.destroy(oilMonster);
     });
   }
 });
