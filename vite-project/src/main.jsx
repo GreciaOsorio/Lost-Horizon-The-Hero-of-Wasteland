@@ -46,17 +46,7 @@ function Main() {
   const [gameStarted, setGameStarted] = useState(false); // State to track if the game has started
   const [showTitle, setShowTitle] = useState(true); // State for showing the title screen
 
-  // Define the style you want for the background
-  const myStyle = {
-    backgroundImage:
-      "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')",
-    height: "100vh",
-    marginTop: "-70px",
-    fontSize: "50px",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-  };
-
+ 
   const handleCreatePlayer = async (event) => {
     event.preventDefault();
     if (username) {
