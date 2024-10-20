@@ -38,7 +38,6 @@ function Main() {
     if (gameStarted) {
       createRoot(ui).render(
         <StrictMode>
-          {/* provider to pass the stuff from store file into our UI */}
           <Provider store={store}>
             <ReactUI />
           </Provider>
@@ -47,6 +46,7 @@ function Main() {
       initGame(username); // Initialize the game with the username
     }
   }, [gameStarted, username]);
+  
 
   return (
     <div className="CreatingPlayer">
