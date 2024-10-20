@@ -63,6 +63,26 @@ export default async function initGame(username) {
             "npc-left": 8,
         }
     });
+    k.loadSprite("oilMonster", "./MonsterSprite_Sheets/oilMonster_spritesheet.png",{
+      sliceY: 3,
+      sliceX: 2,
+      anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
+          "down-idle": 0,
+          "up-idle": 4,
+          "right-idle": 2,
+          "left-idle": 5,
+          right: { from: 5, to: 6, loop: true },
+          left: { from: 1, to: 2, loop: true },
+          down: { from: 0, to: 1, loop: true },
+          up: { from: 3, to: 4, loop: true },
+          // 4 is the right one
+          "npc-down": 0,
+          "npc-up": 5,
+          "npc-right": 2,
+          "npc-left": 5,
+      }
+    });
+    
 
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
@@ -92,6 +112,7 @@ export default async function initGame(username) {
       k.add([k.sprite("roof"), k.pos(0, 1040), k.scale(1), k.area(), k.body({ isStatic: true }), "bottom"]),
 
     ];
+    
  
   
     const player = k.add([
@@ -107,11 +128,12 @@ export default async function initGame(username) {
         // creating custom properties
         {
             // can access in other areas by putting player.speed
-            speed: 200,
+            speed: 300,
             //  specify the corr
             direction: k.vec2(0,0),
         },
     ]);
+   
 
     // on frame
     player.onUpdate(() =>{
@@ -177,6 +199,20 @@ export default async function initGame(username) {
         k.scale(4),
         "bird"
     ]);
+
+    const oilMonster = k.add([
+      k.sprite("oilMonster", {anim: "npc-down"}),
+      k.area(),
+      // k body is for the physics/collision
+      k.body({ isStatic: true, isSensor: true }),
+      k.anchor("center"),
+      k.pos(50,300),
+      k.scale(0.5),
+      "oilMonsters"
+      // adding a tag to identify in collision handlers
+     
+  ]);
+
     // Flag to track if interaction is complete
 // Flag to track if interaction is complete
 let interactionComplete = false;
@@ -216,6 +252,41 @@ npc.onCollide("player", (player) => {
       // Remove the bird after interaction is complete
       k.destroy(npc);
       console.log("Bird has been removed after interaction.");
+    });
+  }
+});
+
+// Separate interaction flag for oilMonster
+let oilMonsterInteractionComplete = false;
+
+oilMonster.onCollide("player", (player) => {
+  if (!oilMonsterInteractionComplete) {
+    console.log("Collided with the oilMonster");
+
+    // Animation logic based on player's direction
+    if (player.direction.eq(k.vec2(0, -1))) {
+      oilMonster.play("npc-down");
+    }
+
+    if (player.direction.eq(k.vec2(0, 1))) {
+      oilMonster.play("npc-up");
+    }
+
+    if (player.direction.eq(k.vec2(1, 0))) {
+      oilMonster.play("npc-right");
+    }
+
+    if (player.direction.eq(k.vec2(-1, 0))) {
+      oilMonster.play("npc-left");
+    }
+
+    // Set interaction as complete so that the collision doesn't repeat
+    oilMonsterInteractionComplete = true;
+
+    k.wait(3, () => {
+      // After interaction, you can reset the interactionComplete if needed
+      oilMonsterInteractionComplete = false;
+      console.log("OilMonster interaction reset after 3 seconds.");
     });
   }
 });
