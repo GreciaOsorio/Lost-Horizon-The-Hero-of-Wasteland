@@ -140,7 +140,7 @@ export default async function initGame(username) {
         k.body(),
         k.anchor("center"),
         k.pos(50,100),
-        k.scale(3),
+        k.scale(2.5),
         // adding a tag to identify in collision handlers
         "player",
         // creating custom properties
