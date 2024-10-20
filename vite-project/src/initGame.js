@@ -2,23 +2,31 @@ import initKaplay from "./kaplayCtx";
 import { isTextBoxVisibleAtom, store, textBoxContentAtom } from "./store";
 //for firebase
 import {db} from './firebase.js'; 
-import {collection, addDoc} from 'firebase/firestore'; 
+import {collection, doc, addDoc} from 'firebase/firestore'; 
 
 //For Firebase 
-export async function addPlayerToFirebase(username){
+export async function addPlayerToFirebase(username) {
   try {
     const docRef = await addDoc(collection(db, "Player"), {
       username: username,
       health: 100,
       seedsCurrency: 50,
-      // add other properties as needed 
-      // weapon, healthPotions, powerPotions
+      // add other player properties here as needed
     });
     console.log("Player created with ID: ", docRef.id);
   } catch (error) {
     console.error("Error creating player: ", error);
   }
-  console.log("created playerin db");
+}
+
+export async function fetchPlayerFromFirebase(uid) {
+  const playerDoc = await getDoc(doc(db, "Player", uid));
+  if (playerDoc.exists()) {
+    return playerDoc.data();
+  } else {
+    console.log("No such player!");
+    return null;
+  }
 }
 
 export default async function initGame(username) {
