@@ -112,7 +112,6 @@ export default async function initGame(username) {
       k.add([k.sprite("roof"), k.pos(0, 1040), k.scale(1), k.area(), k.body({ isStatic: true }), "bottom"]),
 
     ];
-    
  
   
     const player = k.add([
