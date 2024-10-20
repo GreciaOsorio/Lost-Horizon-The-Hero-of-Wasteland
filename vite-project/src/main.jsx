@@ -20,14 +20,23 @@ new ResizeObserver(() => {
   );
 }).observe(ui.parentElement);
 
-
 // Create the root once
 const root = createRoot(ui);
-
 
 function Main() {
   const [username, setUsername] = useState(""); // State for username
   const [gameStarted, setGameStarted] = useState(false); // State to track if the game has started
+
+  // Define the style you want for the background
+  const myStyle = {
+    backgroundImage:
+      "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')",
+    height: "100vh",
+    marginTop: "-70px",
+    fontSize: "50px",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+  };
 
   const handleCreatePlayer = async (event) => {
     event.preventDefault();
@@ -46,12 +55,11 @@ function Main() {
           <Provider store={store}>
             <ReactUI />
           </Provider>
-        </StrictMode>,
-      )
+        </StrictMode>
+      );
       initGame(username); // Initialize the game with the username
     }
   }, [gameStarted, username]);
-  
 
   return (
     <div className="CreatingPlayer">
@@ -70,9 +78,8 @@ function Main() {
           </form>
         </div>
       ) : (
-        <div id="game-container" style={{ width: "100%", height: "100vh" }}>
+        <div id="game-container" style={myStyle}>
           {/* The game will be rendered inside this container */ }
-          
         </div>
       )}
     </div>
