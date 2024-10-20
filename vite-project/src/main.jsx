@@ -9,6 +9,10 @@ import TextBox from './ReactComponents/TextBox.jsx';
 
 const ui = document.getElementById("ui");
 
+// Create the root once
+const root = createRoot(ui);
+
+
 // Resizing observer for scaling the UI
 new ResizeObserver(() => {
   document.documentElement.style.setProperty(
@@ -20,9 +24,38 @@ new ResizeObserver(() => {
   );
 }).observe(ui.parentElement);
 
+
+// TitlePage function
+function TitlePage({ onTitleEnd }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onTitleEnd(); // Call the function to signal that the title duration has ended
+    }, 4000); // 4000 milliseconds = 4 seconds
+    return () => clearTimeout(timer); // Cleanup timer when component unmounts
+  }, [onTitleEnd]);
+
+  return (
+    <div className="title-screen">
+      <h1>Lost Horizon: The Hero of the Wastelands</h1>
+    </div>
+  );
+}
+
 function Main() {
   const [username, setUsername] = useState(""); // State for username
   const [gameStarted, setGameStarted] = useState(false); // State to track if the game has started
+  const [showTitle, setShowTitle] = useState(true); // State for showing the title screen
+
+  // Define the style you want for the background
+  const myStyle = {
+    backgroundImage:
+      "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')",
+    height: "100vh",
+    marginTop: "-70px",
+    fontSize: "50px",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+  };
 
   const handleCreatePlayer = async (event) => {
     event.preventDefault();
@@ -36,21 +69,23 @@ function Main() {
   // Initialize the game after gameStarted becomes true
   useEffect(() => {
     if (gameStarted) {
-      createRoot(ui).render(
+      root.render(
         <StrictMode>
           <Provider store={store}>
             <ReactUI />
           </Provider>
-        </StrictMode>,
-      )
+        </StrictMode>
+      );
       initGame(username); // Initialize the game with the username
     }
   }, [gameStarted, username]);
-  
 
   return (
     <div className="CreatingPlayer">
-      {!gameStarted ? ( // Show the form only if the game hasn't started
+      {showTitle ? (
+        <TitlePage onTitleEnd={() => setShowTitle(false)} /> // Call TitlePage with callback
+      ) : (
+      !gameStarted ? ( // Show the form only if the game hasn't started
         <div className="login-form"> {/* Wrap the form with this class */}
           <h1>Enter your name to start the game</h1>
           <form onSubmit={handleCreatePlayer}>
@@ -65,17 +100,17 @@ function Main() {
           </form>
         </div>
       ) : (
-        <div id="game-container" style={{ width: "100%", height: "100vh" }}>
+        <div id="game-container" style={myStyle}>
           {/* The game will be rendered inside this container */ }
-          
         </div>
+      )
       )}
     </div>
   );
 }
 
 // Render the root with Provider for state management
-createRoot(ui).render(
+root.render(
   <StrictMode>
     <Main />
   </StrictMode>
