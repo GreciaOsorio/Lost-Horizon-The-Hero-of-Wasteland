@@ -5,19 +5,20 @@ import initGame, { addPlayerToFirebase } from './initGame.js';
 import ReactUI from './ReactUI.jsx'; // Import the ReactUI component
 import { Provider } from 'jotai'; // State management
 import { store } from './store.js'; // Import your Jotai store
+import TextBox from './ReactComponents/TextBox.jsx';
 
 const ui = document.getElementById("ui");
 
 // Resizing observer for scaling the UI
-// new ResizeObserver(() => {
-//   document.documentElement.style.setProperty(
-//     "--scale",
-//     Math.min(
-//       ui.parentElement.offsetWidth / ui.offsetWidth,
-//       ui.parentElement.offsetHeight / ui.offsetHeight
-//     )
-//   );
-// }).observe(ui.parentElement);
+new ResizeObserver(() => {
+  document.documentElement.style.setProperty(
+    "--scale",
+    Math.min(
+      ui.parentElement.offsetWidth / ui.offsetWidth,
+      ui.parentElement.offsetHeight / ui.offsetHeight
+    )
+  );
+}).observe(ui.parentElement);
 
 function Main() {
   const [username, setUsername] = useState(""); // State for username
@@ -32,10 +33,17 @@ function Main() {
     }
   };
 
-
   // Initialize the game after gameStarted becomes true
   useEffect(() => {
     if (gameStarted) {
+      createRoot(ui).render(
+        <StrictMode>
+          {/* provider to pass the stuff from store file into our UI */}
+          <Provider store={store}>
+            <ReactUI />
+          </Provider>
+        </StrictMode>,
+      )
       initGame(username); // Initialize the game with the username
     }
   }, [gameStarted, username]);
@@ -58,7 +66,7 @@ function Main() {
         </div>
       ) : (
         <div id="game-container" style={{ width: "100%", height: "100vh" }}>
-          {/* The game will be rendered inside this container */}
+          {/* The game will be rendered inside this container */ }
           
         </div>
       )}
