@@ -68,22 +68,35 @@ export default async function initGame(username) {
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
 
-    // k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
-  
+     // Load the wall asset
+     k.loadSprite("floor1", "./longfloor.png", {
+    
+     });
+
+     k.loadSprite("floor1", "./longfloor.png");
+
+     // Create multiple floors with different positions and possibly larger scale for visibility
+     const floors = [
+       k.add([k.sprite("floor1"), k.pos(0, 100), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+       k.add([k.sprite("floor1"), k.pos(110, 300), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+       k.add([k.sprite("floor1"), k.pos(500, 800), k.scale(0.5), k.area(), k.body({ isStatic: true }), "floor"]),
+       // Add more floors as needed
+     ];
+
     const player = k.add([
         k.sprite("characters", {anim: "down-idle"}),
         k.area(),
         // k body is for the physics/collision
         k.body(),
         k.anchor("center"),
-        k.pos(k.center()),
-        k.scale(8),
+        k.pos(5,100),
+        k.scale(4),
         // adding a tag to identify in collision handlers
         "player",
         // creating custom properties
         {
             // can access in other areas by putting player.speed
-            speed: 800,
+            speed: 200,
             //  specify the corr
             direction: k.vec2(0,0),
         },
@@ -145,39 +158,56 @@ export default async function initGame(username) {
         k.sprite("bird", {anim: "npc-left"}),
         k.area({ width: 1, height: 1}), // Adjust width and height as needed
         // static will be a wall to not push
-        k.body({ isStatic: true}),
+        k.body({ isStatic: true, isSensor: true }),
         // centered
         k.anchor("center"),
         // size of bird
-        k.scale(7),
-        // postition of bird
-        k.pos(1480,500),
+        k.pos(900, 60), // Position the wall at coordinates x=100, y=200
+        k.scale(4),
+        "bird"
     ]);
+    // Flag to track if interaction is complete
+// Flag to track if interaction is complete
+let interactionComplete = false;
 
-    // use the player tag
-    npc.onCollide("player", (player) => {
-      console.log("collided with the player");
-      if (player.direction.eq(k.vec2(0, -1))) {
-        store.set(textBoxContentAtom, "Beautiful day, isn't it?");
-        npc.play("npc-down");
-      }
-  
-      if (player.direction.eq(k.vec2(0, 1))) {
-        npc.play("npc-up");
-        store.set(textBoxContentAtom, "Those rocks are heavy!");
-      }
-  
-      if (player.direction.eq(k.vec2(1, 0))) {
-        npc.play("npc-left");
-        store.set(textBoxContentAtom, "This text box is made with React.js!");
-      }
-  
-      if (player.direction.eq(k.vec2(-1, 0))) {
-        store.set(textBoxContentAtom, "Is the water too cold?");
-        npc.play("npc-right");
-      }
-  
-      store.set(isTextBoxVisibleAtom, true);
+npc.onCollide("player", (player) => {
+  if (!interactionComplete) {
+    console.log("Collided with the player");
+
+    // Dialogue logic based on player's direction
+    if (player.direction.eq(k.vec2(0, -1))) {
+      store.set(textBoxContentAtom, "Beautiful day, isn't it?");
+      npc.play("npc-down");
+    }
+
+    if (player.direction.eq(k.vec2(0, 1))) {
+      npc.play("npc-up");
+      store.set(textBoxContentAtom, "Those rocks are heavy!");
+    }
+
+    if (player.direction.eq(k.vec2(1, 0))) {
+      npc.play("npc-left");
+      store.set(textBoxContentAtom, "This text box is made with React.js!");
+    }
+
+    if (player.direction.eq(k.vec2(-1, 0))) {
+      store.set(textBoxContentAtom, "Is the water too cold?");
+      npc.play("npc-right");
+    }
+
+    // Show the text box
+    store.set(isTextBoxVisibleAtom, true);
+
+    // Set interactionComplete to true after text is shown
+    interactionComplete = true;
+
+    k.wait(2, () => {
+      // Remove the bird after interaction is complete
+      k.destroy(npc);
+      console.log("Bird has been removed after interaction.");
     });
+  }
+});
+
 
 }
