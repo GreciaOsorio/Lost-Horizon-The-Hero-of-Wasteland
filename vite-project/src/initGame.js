@@ -1,7 +1,9 @@
+
 import initKaplay from "./kaplayCtx"; 
 //for firebase
 import {db} from './firebase.js'; 
 import {collection, addDoc} from 'firebase/firestore'; 
+import { isTextBoxVisibleAtom, store, textBoxContentAtom } from "./store";
 
 
 
@@ -47,9 +49,29 @@ export default async function initGame(username) {
             "npc-left": 15,
         }
     });
+    k.loadSprite("bird", "./blueBird.png", {
+        sliceY: 13,
+        sliceX: 4,
+        anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
+            "down-idle": 0,
+            "up-idle": 13,
+            "right-idle": 10,
+            "left-idle": 6,
+            right: { from: 5, to: 8, loop: true },
+            left: { from: 10, to: 13, loop: true },
+            down: { from: 8, to: 9, loop: true },
+            up: { from: 10, to: 11, loop: true },
+            "npc-down": 21,
+            "npc-up": 48,
+            "npc-right": 36,
+            "npc-left": 8,
+        }
+    });
 
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
+
+    // k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
   
     const player = k.add([
         k.sprite("characters", {anim: "down-idle"}),
@@ -125,4 +147,46 @@ export default async function initGame(username) {
         // direction is chosen from the above if statements
         player.move(player.direction.scale(player.speed));
     });
+
+    // the villagers
+    const npc = k.add([
+      // the animation
+        k.sprite("bird", {anim: "npc-left"}),
+        k.area({ width: 1, height: 1}), // Adjust width and height as needed
+        // static will be a wall to not push
+        k.body({ isStatic: true}),
+        // centered
+        k.anchor("center"),
+        // size of bird
+        k.scale(7),
+        // postition of bird
+        k.pos(1480,500),
+    ]);
+
+    // use the player tag
+    npc.onCollide("player", (player) => {
+      console.log("collided with the player");
+      if (player.direction.eq(k.vec2(0, -1))) {
+        store.set(textBoxContentAtom, "Beautiful day, isn't it?");
+        npc.play("npc-down");
+      }
+  
+      if (player.direction.eq(k.vec2(0, 1))) {
+        npc.play("npc-up");
+        store.set(textBoxContentAtom, "Those rocks are heavy!");
+      }
+  
+      if (player.direction.eq(k.vec2(1, 0))) {
+        npc.play("npc-left");
+        store.set(textBoxContentAtom, "This text box is made with React.js!");
+      }
+  
+      if (player.direction.eq(k.vec2(-1, 0))) {
+        store.set(textBoxContentAtom, "Is the water too cold?");
+        npc.play("npc-right");
+      }
+  
+      store.set(isTextBoxVisibleAtom, true);
+    });
+
 }
