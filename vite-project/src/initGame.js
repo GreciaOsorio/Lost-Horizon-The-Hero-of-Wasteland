@@ -233,7 +233,7 @@ npc.onCollide("player", (player) => {
 
     if (player.direction.eq(k.vec2(1, 0))) {
       npc.play("npc-left");
-      store.set(textBoxContentAtom, "This text box is made with React.js!");
+      store.set(textBoxContentAtom, "My wings are so heavy, someone spill something oily everywhere :(!");
     }
 
     if (player.direction.eq(k.vec2(-1, 0))) {
