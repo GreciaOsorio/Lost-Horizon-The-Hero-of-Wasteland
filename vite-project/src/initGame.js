@@ -74,18 +74,35 @@ export default async function initGame(username) {
       sliceX: 2,
       anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
           "down-idle": 0,
-          "up-idle": 4,
-          "right-idle": 2,
-          "left-idle": 5,
+          "up-idle": 5,
+          "right-idle": 4,
+          "left-idle": 2,
           right: { from: 5, to: 6, loop: true },
           left: { from: 1, to: 2, loop: true },
           down: { from: 0, to: 1, loop: true },
           up: { from: 3, to: 4, loop: true },
-          // 4 is the right one
           "npc-down": 0,
           "npc-up": 5,
-          "npc-right": 2,
-          "npc-left": 5,
+          "npc-right": 4,
+          "npc-left": 2,
+      }
+    });
+      k.loadSprite("smogMonster", "./MonsterSprite_Sheets/SmogMonster_spritesheet.png",{
+      sliceY: 3,
+      sliceX: 2,
+      anims: { //this defines the animations, the names you choose and the numbers represent the index of the image you wish to showcase
+          "down-idle": 0,
+          "up-idle": 4,
+          "right-idle": 4,
+          "left-idle": 2,
+          right: { from: 5, to: 6, loop: true },
+          left: { from: 1, to: 2, loop: true },
+          down: { from: 0, to: 1, loop: true },
+          up: { from: 3, to: 4, loop: true },
+          "npc-down": 0,
+          "npc-up": 4,
+          "npc-right": 4,
+          "npc-left": 2,
       }
     });
     k.loadSprite("PlasticMonster", "./MonsterSprite_Sheets/PlasticMonster_sprtiesheet.png",{
@@ -162,6 +179,8 @@ export default async function initGame(username) {
           "npc-left": 3,
       }
     });
+
+    
 
     // we didn't create a reference like we did for player because it is not needed
     k.add([k.sprite("background"), k.pos(0, -70), k.scale(8)]);
@@ -290,21 +309,35 @@ export default async function initGame(username) {
         "bird"
     ]);
 
-  //monsters
+    const oilMonster = k.add([
+      k.sprite("oilMonster", {anim: "npc-down"}),
+      k.area(),
+      // k body is for the physics/collision
+      k.body({ isStatic: true, isSensor: true }),
+      k.anchor("center"),
+      k.pos(1400,200),
+      k.scale(0.5),
+      "oilMonsters"
+      // adding a tag to identify in collision handlers
+     
+  ]);
 
-  const oilMonster = k.add([
-    k.sprite("oilMonster", {anim: "npc-down"}),
+
+    
+  const smogMonster = k.add([
+    k.sprite("smogMonster", {anim: "npc-down"}),
     k.area(),
     // k body is for the physics/collision
     k.body({ isStatic: true, isSensor: true }),
     k.anchor("center"),
-    k.pos(50,300),
+    k.pos(530,380),
     k.scale(0.5),
-    "oilMonsters"
+    "smogMonsters"
     // adding a tag to identify in collision handlers
-     
-  ]);
-  const PlasticMonster = k.add([
+   
+]);
+  
+   const PlasticMonster = k.add([
     k.sprite("PlasticMonster", {anim: "npc-down"}),
     k.area(),
     // k body is for the physics/collision
@@ -412,24 +445,24 @@ oilMonster.onCollide("player", (player) => {
     // Animation logic based on player's direction
     if (player.direction.eq(k.vec2(0, -1))) {
       oilMonster.play("npc-down");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "All these companies are polluting the air and creating more of me");
     }
 
     if (player.direction.eq(k.vec2(0, 1))) {
       oilMonster.play("npc-up");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "It's getting hard to breath because of me...");
 
     }
 
     if (player.direction.eq(k.vec2(1, 0))) {
       oilMonster.play("npc-right");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "Air pollution am I right...");
 
     }
 
     if (player.direction.eq(k.vec2(-1, 0))) {
       oilMonster.play("npc-left");
-      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+      store.set(textBoxContentAtom, "The big boss man brought me here");
 
     }
 
@@ -446,6 +479,57 @@ oilMonster.onCollide("player", (player) => {
       console.log("OilMonster interaction reset after 3 seconds.");
       // CHANGE LATER
       k.destroy(oilMonster);
+    });
+  }
+});
+
+// Separate interaction flag for oilMonster
+let smogMonsterInteractionComplete = false;
+
+smogMonster.onCollide("player", (player) => {
+  if (!smogMonsterInteractionComplete) {
+    console.log("Collided with the smogMonster");
+
+    // Reset text before each interaction
+    store.set(textBoxContentAtom, "");
+
+    // Animation logic based on player's direction
+    if (player.direction.eq(k.vec2(0, -1))) {
+      smogMonster.play("npc-down");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+    }
+
+    if (player.direction.eq(k.vec2(0, 1))) {
+      smogMonster.play("npc-up");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    if (player.direction.eq(k.vec2(1, 0))) {
+      smogMonster.play("npc-right");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    if (player.direction.eq(k.vec2(-1, 0))) {
+      smogMonster.play("npc-left");
+      store.set(textBoxContentAtom, "I fell off a boat by the coast, no one came to pick me up so I have just made a mess everywhere...");
+
+    }
+
+    // Show the text box
+    store.set(isTextBoxVisibleAtom, true);
+
+    // Set interaction as complete so that the collision doesn't repeat
+    smogMonsterInteractionComplete = true;
+
+
+    k.wait(3, () => {
+      // After interaction, you can reset the interactionComplete if needed
+    
+      console.log("OilMonster interaction reset after 3 seconds.");
+      // CHANGE LATER
+      k.destroy(smogMonster);
     });
   }
 });
